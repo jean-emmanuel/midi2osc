@@ -7,12 +7,14 @@ Released under GNU/GPL License (http://www.gnu.org/)
 """
 
 from mididings import *
+from mididings.engine import output_event
+from mididings.event import CtrlEvent
 import liblo as _liblo
 
 # Config
 
 midiBackend = 'alsa'    # jack or alsa
-feedBackMidi = 0        # monitor oscInPort to send Midi CC to the device
+feedBackMidi = 1        # monitor oscInPort to send Midi CC to the device > feedback midi is sent on channel 1
 oscOutPort = 3333       # output port
 oscInPort = 3334        # input port (used to control the midi device with osc messages)
 oscName = 'nanoKontrol' # all osc messages begin with /oscName
@@ -67,11 +69,11 @@ class osc2midi(object):
             
     @_liblo.make_method(None, 'f')
     def sendMidi(self, path, args):
-        value = int(max(1,min(0,args[0]))*127)
+        value = int(max(0,min(1,args[0]))*127)
         if path[len(oscPrefix):] in self.patch and oscPrefix in path:
-            Ctrl(self.patch[path[len(oscPrefix):]],value)
+            output_event(CtrlEvent('Midi2oscOut',1,self.patch[path[len(oscPrefix):]],value)) 
         elif oscPrefix+'/CC/' in path:
-            Ctrl(int(path.split('/')[-1]),value)
+            output_event(CtrlEvent('Midi2oscOut',1,self.patch[path[len(oscPrefix):]],value)) 
         
 # MIDI -> OSC
 
