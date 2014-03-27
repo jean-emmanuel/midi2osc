@@ -7,8 +7,16 @@ Generic Midi to OSC Router
 
 midi2osc converts midi control changes to osc messages
 
-- the osc messages can be defined for each midi control number in the variable oscPatch (dictionnary) :
 ```
+midiBackend = 'alsa'    # jack or alsa
+feedBackMidi = 0        # monitor oscInPort to send Midi CC to the device
+oscOutPort = 3333       # output port
+oscInPort = 3334        # input port (used to control the midi device with osc messages)
+oscName = 'nanoKontrol' # all osc messages begin with /oscName
+
+# oscPatch = dict(CTRL_NUMBER, 'OSC_PATH')
+# Midi CC -> oscOutPort /oscName/OSC_PATH [value*]  *between 0 and 1
+# oscinPort /oscName/OSC_PATH [value*] -> Midi CC   *between 0 and 1
 oscPatch = {    
     0: '/Transport/Backward',
     1: '/Transport/Forward',
@@ -17,10 +25,8 @@ oscPatch = {
     4: '/Transport/Record'
 }
 ```
-- osc message will be '/oscName/Transport/Record 1' for a midi CC (controler=4, value=127)
-- midi values from 0 to 127 are mapped between 0.0 and 1.0
+
 - once running, the router must be connected to the appropriate midi device using a patchbay such as qjackctl
-- feedBackMidi can be set to 1 in order to convert osc messages sent to router into midi control changes sent to the device
 
 
 
