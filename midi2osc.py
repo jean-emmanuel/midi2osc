@@ -68,8 +68,8 @@ class osc2midi(object):
     @_liblo.make_method(None, 'f')
     def sendMidi(self, path, args):
         value = int(max(1,min(0,args[0]))*127)
-        if path in self.patch and oscPrefix in path:
-            Ctrl(self.patch[path],value)
+        if path[len(oscPrefix):] in self.patch and oscPrefix in path:
+            Ctrl(self.patch[path[len(oscPrefix):]],value)
         elif oscPrefix+'/CC/' in path:
             Ctrl(int(path.split('/')[-1]),value)
         
