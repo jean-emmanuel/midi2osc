@@ -3,7 +3,7 @@
 """
 Midi to OSC Router
 Copyleft Jean-Emmanuel Doucet (http://ammd.net)
-Released under GNU/GPL License (http://www.gnu.org/)
+Released under GNU/GPL License v3 (http://www.gnu.org/)
 """
 
 from mididings import *
